@@ -1,8 +1,21 @@
+import "./Home.css";
+
+import { useFetch } from "../hooks/useFetch";
+
 const Home = () => {
+    const { data: articles, isPending, error } = useFetch("http://localhost:3000/articles");
     return (
-        <div>
+        <div className="home">
             <h5>Home page</h5>
-            <p>A home page is the primary web page that a visitor will view when they navigate to a website via a search engine, and it may also function as a landing page to attract visitors..[3][4] In some cases, the home page is a site directory, particularly when a website has multiple home pages.</p>
+            {isPending && <div>Loading ...</div>}
+            {error && <div>{error}</div>}
+            {articles && articles.map(article => (
+                <div key={article.id} className="card">
+                    <h4>{article.title}</h4>
+                    <p>{article.author}</p>
+                    <a href={`/articles/${article.id}`}>Read more ...</a>
+                </div>
+            ))}
         </div>
     )
 }
